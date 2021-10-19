@@ -12,46 +12,60 @@ class Item {
     }
     updateQuality() {
       this.items.forEach(item => {
-        if (item.name != 'Sulfuras, Hand of Ragnaros') {
-          item.sellIn = item.sellIn - 1;
+        const isSulfuras = item.name == "Sulfuras, Hand of Ragnaros";
+  
+        if (!isSulfuras) {
+          item.sellIn--;
         }
-        if (item.name != 'Aged Brie' && item.name != 'Backstage passes to a TAFKAL80ETC concert') {
-          if (item.quality > 0) {
-            if (item.name != 'Sulfuras, Hand of Ragnaros') {
-              item.quality = item.quality - 1;
+  
+        const isAgedBrie = item.name == "Aged Brie";
+        const isBackstagePasses =
+          item.name == "Backstage passes to a TAFKAL80ETC concert";
+        const isQualityBiggerThan0 = item.quality > 0;
+        const isQualityLessThan50 = item.quality < 50;
+      
+        const tenDaysOrLessToSell = item.sellIn <= 10;
+        const fiveDaysOrLessToSell = item.sellIn <= 5;
+        const areNoMoreDaysToSell = item.sellIn < 0;
+  
+        if (!isAgedBrie && !isBackstagePasses) {
+          if (isQualityBiggerThan0) {
+            if (!isSulfuras) {
+              item.quality--;
             }
           }
         } else {
-          if (item.quality < 50) {
-            item.quality = item.quality + 1;
-            if (item.name == 'Backstage passes to a TAFKAL80ETC concert') {
-              if (item.sellIn < 11) {
-                if (item.quality < 50) {
-                  item.quality = item.quality + 1;
+          if (isQualityLessThan50) {
+            item.quality++;
+            if (isBackstagePasses) {
+              if (tenDaysOrLessToSell) {
+                if (isQualityLessThan50) {
+                  item.quality++;
                 }
               }
-              if (item.sellIn < 6) {
-                if (item.quality < 50) {
-                  item.quality = item.quality + 1;
+              if (fiveDaysOrLessToSell) {
+                if (isQualityLessThan50) {
+                  item.quality++;
                 }
               }
             }
           }
         }
-        if (item.sellIn < 0) {
-          if (item.name != 'Aged Brie') {
-            if (item.name != 'Backstage passes to a TAFKAL80ETC concert') {
-              if (item.quality > 0) {
-                if (item.name != 'Sulfuras, Hand of Ragnaros') {
-                  item.quality = item.quality - 1;
+  
+        if (areNoMoreDaysToSell) {
+          if (!isAgedBrie) {
+            if (!isBackstagePasses) {
+              if (isQualityBiggerThan0) {
+                if (!isSulfuras) {
+                  item.quality--;
                 }
               }
             } else {
-              item.quality = item.quality - item.quality;
+              item.quality = 0;
             }
           } else {
-            if (item.quality < 50) {
-              item.quality = item.quality + 1;
+            if (isQualityBiggerThan0) {
+              item.quality++;
             }
           }
         }
